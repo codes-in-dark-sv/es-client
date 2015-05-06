@@ -22,7 +22,8 @@ object ElasticSearch extends Controller with UtilBijections {
  		val json = request.body
 	    //val futureFinagle = FinagleClient.documentSearch( json )          
 	    //val futureScala = Santix.twitter2Scala( futureFinagle )
-	    val futureScala = twitter2ScalaFuture( FinagleClient.documentSearch( json ) )
+	    //val futureScala = twitter2ScalaFuture( FinagleClient.documentSearch( json ) )
+	    val futureScala = FinagleClient.documentSearch( json ).as[scala.concurrent.Future[org.jboss.netty.handler.codec.http.HttpResponse]]
  
 	    futureScala.map( f => 
 	    	Ok( Json.parse( f.getContent.toString(CharsetUtil.UTF_8) ) ) 

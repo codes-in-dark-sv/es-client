@@ -7,4 +7,5 @@ curl -H "Content-Type: application/json" -X POST -d ' {"query":{"term":{"name.au
 curl -H "Content-Type: application/json" -X POST -d ' {"query":{"term":{"name.autocomplete":"d"}},"facets":{"name":{"terms":{"field":"name"}}}}' http://localhost:9200/santix/items/_search
 
 
+curl -H "Content-Type: application/json" -X POST -d ' {"query":{"term":{"name.autocomplete":"d"}},"facets":{"name":{"terms":{"field":"name"}}}}' http://10.0.2.43:9000/term
 
