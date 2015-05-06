@@ -2,7 +2,7 @@
 // Play settings
 //*************
 
-name := """gosantix"""
+name := """finagle elasticsearch"""
 
 version := "1.0-SNAPSHOT"
 

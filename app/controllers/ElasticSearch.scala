@@ -20,9 +20,9 @@ object ElasticSearch extends Controller with UtilBijections {
 	def term = Action.async(parse.json) { request =>
  
  		val json = request.body
-	    val futureFinagle = FinagleClient.documentSearch( json )          
-	    val futureScala = Santix.twitter2Scala( futureFinagle )
-	    //val futureScala = twitter2ScalaFuture( FinagleClient.documentSearch( json ) )
+	    //val futureFinagle = FinagleClient.documentSearch( json )          
+	    //val futureScala = Santix.twitter2Scala( futureFinagle )
+	    val futureScala = twitter2ScalaFuture( FinagleClient.documentSearch( json ) )
  
 	    futureScala.map( f => 
 	    	Ok( Json.parse( f.getContent.toString(CharsetUtil.UTF_8) ) ) 
