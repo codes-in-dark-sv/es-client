@@ -3,8 +3,9 @@ package lib
 
 import com.twitter.finagle.ServiceFactory
 import org.jboss.netty.handler.codec.http._
-import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.http.Http
+//import com.twitter.finagle.builder.ClientBuilder
+//import com.twitter.finagle.http.Http
+import com.twitter.finagle.{Http, Service}
 import com.twitter.conversions.time._
 import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.util.CharsetUtil._
@@ -26,12 +27,15 @@ object FinagleClient{
   /**
    * You init a clientFactory only once and use it several times across your application
    */
+  /* 
   val clientFactory: ServiceFactory[HttpRequest, HttpResponse] = ClientBuilder()
     .codec(Http())
     .hosts(hosts)
     .tcpConnectTimeout(1.second)
     .hostConnectionLimit(1)
-    .buildFactory()
+    .buildFactory() 
+  */ 
+  val clientFactory: Service[HttpRequest, HttpResponse] = Http.newService(hosts)  
 
   /**
    * The path to the elastic search table (index) and the json to send
@@ -103,7 +107,7 @@ object FinagleClient{
    * @param request The request
    * @return
    */
-  def sendToElastic(request: DefaultHttpRequest): Future[HttpResponse] ={
+  def sendToElastic(request: DefaultHttpRequest): Future[HttpResponse] = {
     val client = clientFactory.apply()()
     Logger.debug("Request to send is %s" format request)
     val httpResponse = client(request)
