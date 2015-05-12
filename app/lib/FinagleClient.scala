@@ -16,6 +16,7 @@ import play.api.Logger
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 import play.api.Play.current
+import com.twitter.util.Await
 
 
 object FinagleClient{
@@ -108,7 +109,8 @@ object FinagleClient{
    * @return
    */
   def sendToElastic(request: DefaultHttpRequest): Future[HttpResponse] = {
-    val client = clientFactory.apply()()
+    //val client = clientFactory.apply()()
+    val client = clientFactory
     Logger.debug("Request to send is %s" format request)
     val httpResponse = client(request)
 
