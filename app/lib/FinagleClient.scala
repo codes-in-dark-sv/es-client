@@ -36,7 +36,7 @@ object FinagleClient{
     .hostConnectionLimit(1)
     .buildFactory() 
   */ 
-  val clientFactory: Service[HttpRequest, HttpResponse] = Http.newService(hosts)  
+  val client: Service[HttpRequest, HttpResponse] = Http.newService(hosts)  
 
   /**
    * The path to the elastic search table (index) and the json to send
@@ -110,17 +110,15 @@ object FinagleClient{
    */
   def sendToElastic(request: DefaultHttpRequest): Future[HttpResponse] = {
     //val client = clientFactory.apply()()
-    val client = clientFactory
+    //val client = clientFactory
     Logger.debug("Request to send is %s" format request)
     val httpResponse = client(request)
 
     httpResponse.onSuccess{
       response =>
         Logger.debug("Received response: " + response)
-        client.close()
     }.onFailure{ err: Throwable =>
-        Logger.error(err.toString)      
-        client.close()
+        Logger.error(err.toString)
     }
   }
 
