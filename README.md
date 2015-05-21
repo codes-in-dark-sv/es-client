@@ -10,7 +10,8 @@ test:
 
 curl -H "Content-Type: application/json" -X POST -d ' {"query":{"term":{"name.autocomplete":"d"}},"facets":{"name":{"terms":{"field":"name"}}}}' http://localhost:9000/term
 
+create microservice:
+assembly
 
 microservice:
-
 sh startserver.sh

@@ -11,3 +11,15 @@ curl -H "Content-Type: application/json" -X POST -d ' {"query":{"term":{"name.au
 
 
 dist
+
+SHA-1: e2ac70cf986e1b56b2425fabec03d825854e4331
+
+
+https://netty.io/4.0/api/constant-values.htmlhttps://netty.io/4.0/api/constant-values.html
+
+//request.headers().add(ORIGIN, "http://localhost")//santo
+
+This site makes use of a SHA-1 Certificate; it's recommended you use certificates with signature algorithms that use hash functions stronger than SHA-1.
+
+Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://localhost:9000/term. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
+

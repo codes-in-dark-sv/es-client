@@ -3,8 +3,6 @@ package lib
 
 import com.twitter.finagle.ServiceFactory
 import org.jboss.netty.handler.codec.http._
-//import com.twitter.finagle.builder.ClientBuilder
-//import com.twitter.finagle.http.Http
 import com.twitter.finagle.{Http, Service}
 import com.twitter.conversions.time._
 import org.jboss.netty.buffer.ChannelBuffers
@@ -22,20 +20,8 @@ import com.twitter.util.Await
 object FinagleClient{
 
 
-  //val hosts= "localhost:9200"
   val hosts = current.configuration.getString("elasticsearch.hosts").get
 
-  /**
-   * You init a clientFactory only once and use it several times across your application
-   */
-  /* 
-  val clientFactory: ServiceFactory[HttpRequest, HttpResponse] = ClientBuilder()
-    .codec(Http())
-    .hosts(hosts)
-    .tcpConnectTimeout(1.second)
-    .hostConnectionLimit(1)
-    .buildFactory() 
-  */ 
   val client: Service[HttpRequest, HttpResponse] = Http.newService(hosts)  
 
   /**
@@ -57,11 +43,12 @@ object FinagleClient{
     val payload = ChannelBuffers.copiedBuffer( Json.stringify(json) , UTF_8)
     val _path = path.mkString("/","/","")
     val request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT, _path)
-    request.headers().add("User-Agent", "Finagle - Play")
-    request.headers().add("Host", hosts) // the host.openOr("localhost") can be replace for host.openOr("default value here")
+    request.headers().add(USER_AGENT, "Finagle - Play")
+    request.headers().add(HOST, hosts) // the host.openOr("localhost") can be replace for host.openOr("default value here")
     request.headers().add(CONTENT_TYPE, "application/json")
     request.headers().add(CONNECTION, "keep-alive")
     request.headers().add(CONTENT_LENGTH, String.valueOf(payload.readableBytes()));
+    request.headers().add(ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost")//santo
     request.setContent(payload)
     Logger.debug("Sending request:\n%s".format(request))
     Logger.debug("Sending body:\n%s".format(request.getContent.toString(CharsetUtil.UTF_8)))
@@ -78,8 +65,13 @@ object FinagleClient{
     val payload = ChannelBuffers.copiedBuffer( Json.stringify(json) , UTF_8)
     val _path = path.mkString("/","/","")
     val request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, _path)
-    request.headers().add("User-Agent", "Finagle - Play")
-    request.headers().add("Host", hosts)
+    request.headers().add(USER_AGENT, "Finagle - Play")
+    request.headers().add(HOST, "http://localhost")
+    request.headers().add(ORIGIN, "http://localhost")//santo
+    request.headers().add(ACCESS_CONTROL_ALLOW_ORIGIN, "*")//santo
+    request.headers().add(ALLOW, "*")//santo
+    request.headers().add(ACCESS_CONTROL_ALLOW_METHODS, "PUT, GET, POST, DELETE, OPTIONS")//santo
+    request.headers().add(ACCESS_CONTROL_ALLOW_HEADERS, "Origin, X-Requested-With, Content-Type, Accept, Referrer, User-Agent")//santo    
     request.headers().add(CONTENT_TYPE, "application/x-www-form-urlencoded")
     request.headers().add(CONTENT_LENGTH, String.valueOf(payload.readableBytes()));
     request.setContent(payload)
@@ -96,8 +88,9 @@ object FinagleClient{
   def requestBuilderDelete(path: List[String]): DefaultHttpRequest = {
     val _path = path.mkString("/","/","")
     val request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.DELETE, _path)
-    request.headers().add("User-Agent", "Finagle - Play")
-    request.headers().add("Host", hosts)
+    request.headers().add(USER_AGENT, "Finagle - Play")
+    request.headers().add(HOST, hosts)
+    request.headers().add(ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost")//santo
     Logger.debug("Sending request:\n%s".format(request))
     Logger.debug("Sending body:\n%s".format(request.getContent.toString(CharsetUtil.UTF_8)))
     request

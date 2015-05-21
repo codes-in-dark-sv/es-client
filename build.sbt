@@ -10,10 +10,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.1"
 
-resolvers += (    
-	"twitter-repo" at "http://maven.twttr.com"
-)
-
 libraryDependencies ++= Seq(
   jdbc,
   anorm,
